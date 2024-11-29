@@ -1,0 +1,6 @@
+/home/zhangboju/homework/Python-Interpreter-2024/resources/CMakeFiles/code.dir
+/home/zhangboju/homework/Python-Interpreter-2024/resources/CMakeFiles/edit_cache.dir
+/home/zhangboju/homework/Python-Interpreter-2024/resources/CMakeFiles/rebuild_cache.dir
+/home/zhangboju/homework/Python-Interpreter-2024/resources/generated/CMakeFiles/PyAntlr.dir
+/home/zhangboju/homework/Python-Interpreter-2024/resources/generated/CMakeFiles/edit_cache.dir
+/home/zhangboju/homework/Python-Interpreter-2024/resources/generated/CMakeFiles/rebuild_cache.dir
