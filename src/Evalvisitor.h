@@ -4,6 +4,7 @@
 
 
 #include "Python3ParserBaseVisitor.h"
+#include "Scope.h"
 
 
 class EvalVisitor : public Python3ParserBaseVisitor {
@@ -48,6 +49,5 @@ class EvalVisitor : public Python3ParserBaseVisitor {
   virtual std::any visitArglist(Python3Parser::ArglistContext *ctx) override ;
   virtual std::any visitArgument(Python3Parser::ArgumentContext *ctx) override ;
 };
-
 
 #endif//PYTHON_INTERPRETER_EVALVISITOR_H

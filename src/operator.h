@@ -5,10 +5,10 @@
 #include <any>
 #include <string>
 
-sjtu::int2048 GetInt(std::any) ;
-std::string GetString(std::any);
-double GetFlout(std::any);
-bool GetBool(std::any);
+sjtu::int2048 GetInt(const std::any &) ;
+std::string GetString(const std::any &);
+double GetFlout(const std::any &);
+bool GetBool(const std::any &);
 
 std::any operator + (const std::any &);
 std::any operator - (const std::any &);
@@ -33,9 +33,5 @@ bool operator <= (const std::any &, const std::any &);
 bool operator >= (const std::any &, const std::any &);
 bool operator == (const std::any &, const std::any &);
 bool operator != (const std::any &, const std::any &);
-bool operator ! (const std::any &);
-
-bool operator | (const std::any &, const std::any &);
-bool operator & (const std::any &, const std::any &);
 
 #endif
