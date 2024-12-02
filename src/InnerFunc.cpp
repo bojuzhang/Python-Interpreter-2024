@@ -22,13 +22,15 @@ void printval(std::any val, char ch) {
     std::cout << std::fixed << std::setprecision(6) << std::any_cast<double>(val) << ch;
   } else if (val.type() == typeid(bool)) {
     std::cout << (std::any_cast<bool>(val) ? "True" : "False") << ch;
+  } else if (!val.has_value()){
+    std::cout << "None" << ch;
   } else {
     assert("INVALID TYPE PRINT" == 0);
   }
 }
 
 std::any Inner(const std::string &funcname, const std::vector<std::any> &val) {
-  std::cerr << "INNER!!!!!!!!!!!!\n";
+  // std::cerr << "INNER!!!!!!!!!!!!\n";
   if (funcname == "print") {
     for (size_t i = 0; i < val.size(); i++) {
       if (i + 1 < val.size()) {
