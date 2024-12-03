@@ -608,7 +608,9 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
       }
     } else {
       // // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
-      res += GetString(std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0]);
+      auto p = std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0];
+      varBack(p);
+      res += GetString(p);
       while (i < s.size() && s[i] != '}') {
         i++;
       }
