@@ -622,8 +622,24 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
   std::string res;
   size_t pos0 = 0, pos1 = 0;
   for (size_t i = 2; i < s.size(); i++) {
-    if (s[i] != '{') {
-      res += stringarray[pos0++]->getText();
+    if (s[i] != '{' || (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{')) {
+      auto tmp =  stringarray[pos0++]->getText();
+      if (i + 1 < s.size() && s[i + 1] == '{') {
+        i++;
+        for (size_t j = 0; j < tmp.size(); j++) {
+          if (tmp[j] == '{') {
+            res += '{';
+            j++;
+          } else if (tmp[j] == '}') {
+            res += '}';
+            j++;
+          } else {
+            res += tmp[j];
+          }
+        }
+      } else {
+        res += tmp;
+      }
       while (i + 1 < s.size() && s[i + 1] != '{') {
         i++;
       }
