@@ -62,6 +62,8 @@ std::string GetString(const std::any &a) {
     return std::string(std::any_cast<sjtu::int2048>(a));
   } else if (a.type() == typeid(double)) {
     return std::to_string(std::any_cast<double>(a));
+  } else if (!a.has_value()) {
+    return std::string("None");
   } else {
     // throw unexpected typeid
     // exit(-1);
