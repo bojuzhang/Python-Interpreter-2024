@@ -9,4 +9,5 @@ resources/.antlr
 # Testcases
 testcases/hidden-testcases
 testcases/basic-testcases/test13.py
+testcases/code.py
 2515

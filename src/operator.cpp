@@ -221,7 +221,7 @@ bool operator == (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
       // throw UNVALID COMPARISON
-      assert("UNVALID COMPARISON" == 0);
+      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) == std::any_cast<std::string>(b);
