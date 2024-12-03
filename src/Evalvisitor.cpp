@@ -224,8 +224,18 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
     return kNOTFLOW;
   }
   if (!ctx->augassign()) {
-    std::vector<std::any> leftarray, rightarray;
-    rightarray = std::any_cast<std::vector<std::any>>(visit(*(testlistarray.rbegin())));
+    std::vector<std::any> leftarray, rightarray, tmp;
+    tmp = std::any_cast<std::vector<std::any>>(visit(*(testlistarray.rbegin())));
+    for (const auto &p : tmp) {
+      if (p.type() == typeid(std::vector<std::any>)) {
+        auto array = std::any_cast<std::vector<std::any>>(p);
+        for (const auto &q : array) {
+          rightarray.push_back(q);
+        }
+      } else {
+        rightarray.push_back(p);
+      }
+    }
     for (auto &p : rightarray) {
       varBack(p);
     }
@@ -544,8 +554,19 @@ std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
   if (ctx->trailer()) {
     auto funcname = std::any_cast<std::string>(visit(ctx->atom()));
     auto vallist = std::any_cast<std::pair<std::vector<std::any>, std::vector<std::pair<std::string, std::any>>>>(visit(ctx->trailer()));
-    auto position = vallist.first;
+    auto tmp = vallist.first;
     auto keyboard = vallist.second;
+    std::vector<std::any> position;
+    for (const auto &p : tmp) {
+      if (p.type() == typeid(std::vector<std::any>)) {
+        auto array = std::any_cast<std::vector<std::any>>(p);
+        for (const auto &q : array) {
+          position.push_back(q);
+        }
+      } else {
+        position.push_back(p);
+      }
+    }
     // if (funcname == "pollard_rho") {
     //   std::cerr << "pollard_rho\n" << std::any_cast<sjtu::int2048>((vallist.first)[0]) << "\n";
     // }

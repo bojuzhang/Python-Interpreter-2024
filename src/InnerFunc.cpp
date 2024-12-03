@@ -26,6 +26,7 @@ void printval(std::any val, char ch) {
   } else if (!val.has_value()){
     std::cout << "None" << ch;
   } else {
+    // std::cerr << "valtp: " << val.type().name() << "\n";
     assert("INVALID TYPE PRINT" == 0);
   }
 }
