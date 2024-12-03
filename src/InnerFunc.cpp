@@ -18,7 +18,29 @@ void printval(std::any val, char ch) {
   if (val.type() == typeid(sjtu::int2048)) {
     std::cout << std::any_cast<sjtu::int2048>(val) << ch;
   } else if (val.type() == typeid(std::string)) {
-    std::cout << std::any_cast<std::string>(val) << ch;
+    auto s = std::any_cast<std::string>(val);
+    for (int i = 0; i < s.size(); i++) {
+      if (s[i] == '\\') {
+        i++;
+        if (i >= s.size()) {
+          break;
+        }
+        if (s[i] == 'n') {
+          std::cout << '\n';
+        } else if (s[i] == 't') {
+          std::cout << '\t';
+        } else if (s[i] == '\"') {
+          std::cout << '\"';
+        } else if (s[i] == '\'') {
+          std::cout << '\'';
+        } else {
+          std::cout << s[i];
+        }
+      } else {
+        std::cout << s[i];
+      }
+    }
+    std::cout << ch;
   } else if (val.type() == typeid(double)) {
     std::cout << std::fixed << std::setprecision(6) << std::any_cast<double>(val) << ch;
   } else if (val.type() == typeid(bool)) {
