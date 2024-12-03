@@ -61,7 +61,7 @@ int2048::operator std::string() const {
     s += std::to_string(vals_.back());
     for (int i = len() - 2; i >= 0; i--) {
         std::string t = std::to_string(vals_[i]);
-        while (t.size() < kLEN + 1) {
+        while (t.size() < kLEN) {
             t = "0" + t;
         }
         s += t;

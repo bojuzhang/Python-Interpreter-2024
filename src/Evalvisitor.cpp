@@ -157,7 +157,11 @@ std::any EvalVisitor::visitFuncdef(Python3Parser::FuncdefContext *ctx) {
 }
 
 std::any EvalVisitor::visitParameters(Python3Parser::ParametersContext *ctx) {
-  return visit(ctx->typedargslist());
+  if (!ctx->typedargslist()) {
+    return std::vector<std::pair<std::string, std::any>>();
+  } else {
+    return visit(ctx->typedargslist());
+  }
 }
 
 std::any EvalVisitor::visitTypedargslist(Python3Parser::TypedargslistContext *ctx) {
@@ -308,6 +312,7 @@ std::any EvalVisitor::visitContinue_stmt(Python3Parser::Continue_stmtContext *ct
 
 std::any EvalVisitor::visitReturn_stmt(Python3Parser::Return_stmtContext *ctx) {
   if (!ctx->testlist()) {
+    std::cerr << "VOID RETURN!!!\n";
     return std::any();
   } else {
     auto valarray = std::any_cast<std::vector<std::any>>(visit(ctx->testlist()));
@@ -525,6 +530,7 @@ std::any EvalVisitor::visitMuldivmod_op(Python3Parser::Muldivmod_opContext *ctx)
 }
 
 std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
+  // std::cerr << "visitatom_expr!!!\n";
   if (ctx->trailer()) {
     auto funcname = std::any_cast<std::string>(visit(ctx->atom()));
     auto vallist = std::any_cast<std::pair<std::vector<std::any>, std::vector<std::pair<std::string, std::any>>>>(visit(ctx->trailer()));
@@ -565,20 +571,34 @@ std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
 }
 
 std::any EvalVisitor::visitTrailer(Python3Parser::TrailerContext *ctx) {
-  return visit(ctx->arglist());
+  if (!ctx->arglist()) {
+    return std::pair<std::vector<std::any>, std::vector<std::pair<std::string, std::any>>>();
+  } else {
+    return visit(ctx->arglist());
+  }
 }
 
 std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ctx) {
   auto stringarray = ctx->FORMAT_STRING_LITERAL();
   auto testlistarray = ctx->testlist();
+  auto s = ctx->getText();
+  s.pop_back();
+  // std::cerr << s << "\n";
   std::string res;
-  for (size_t i = 0; i < stringarray.size(); i++) {
-    res += stringarray[i]->getText();
-    auto p = visit(testlistarray[i]);
-    res += GetString(std::any_cast<std::vector<std::any>>(p)[0]);
-  }
-  if (stringarray.size() > testlistarray.size()) {
-    res += stringarray.back()->getText();
+  size_t pos0 = 0, pos1 = 0;
+  for (size_t i = 2; i < s.size(); i++) {
+    if (s[i] != '{') {
+      res += stringarray[pos0++]->getText();
+      while (i + 1 < s.size() && s[i + 1] != '{') {
+        i++;
+      }
+    } else {
+      // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
+      res += GetString(std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0]);
+      while (i < s.size() && s[i] != '}') {
+        i++;
+      }
+    }
   }
   return res;
 }

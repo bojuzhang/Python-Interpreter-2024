@@ -2,6 +2,7 @@
 #include "int2048.h"
 #include <any>
 #include <cassert>
+#include <iostream>
 #include <string>
 
 sjtu::int2048 GetInt(const std::any &a) {
