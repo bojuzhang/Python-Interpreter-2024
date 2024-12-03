@@ -226,18 +226,20 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
   if (!ctx->augassign()) {
     std::vector<std::any> leftarray, rightarray;
     rightarray = std::any_cast<std::vector<std::any>>(visit(*(testlistarray.rbegin())));
+    for (auto &p : rightarray) {
+      varBack(p);
+    }
     for (int i = static_cast<int>(testlistarray.size()) - 2; i >= 0; i--) {
       leftarray = std::any_cast<std::vector<std::any>>(visit(testlistarray[i]));
       for (size_t j = 0; j < rightarray.size(); j++) {
         auto p = rightarray[j];
         varBack(p);
-        // // // std::cerr << "righttp: " << p.type().name() << "\n" << leftarray[j].type().name() << "\n";
-        // // // std::cerr << i << " " << j << " " << rightarray.size() << "\n";
         scope.varSet(std::any_cast<std::string>(leftarray[j]), p);
       }
-      // // // std::cerr << "end loop j\n";
       rightarray = leftarray;
-      // // // std::cerr << "end loop j2\n";
+      for (auto &p : rightarray) {
+        varBack(p);
+      }
     }
   } else {
     // TODO augassign
