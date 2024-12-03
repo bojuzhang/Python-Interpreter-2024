@@ -1,4 +1,5 @@
 #include "InnerFunc.h"
+#include "Evalvisitor.h"
 #include "int2048.h"
 #include "operator.h"
 #include <any>
@@ -32,6 +33,7 @@ void printval(std::any val, char ch) {
 std::any Inner(const std::string &funcname, const std::vector<std::any> &val) {
   // std::cerr << "INNER!!!!!!!!!!!!\n";
   if (funcname == "print") {
+    // std::cerr << "Print!!\n";
     for (size_t i = 0; i < val.size(); i++) {
       if (i + 1 < val.size()) {
         printval(val[i], ' ');
@@ -39,7 +41,10 @@ std::any Inner(const std::string &funcname, const std::vector<std::any> &val) {
         printval(val[i], '\n');
       }
     }
-    return std::any();
+    if (val.empty()) {
+      std::cout << "\n";
+    }
+    return kNOTFLOW;
   } else if (funcname == "int") {
     return GetInt(val[0]);
   } else if (funcname == "str") {

@@ -76,6 +76,7 @@ std::any operator + (const std::any &a) {
 std::any operator - (const std::any &a) {
   if (a.type() == typeid(std::string)) {
     // throw invalid operator
+    std::cerr << "test " << std::any_cast<std::string>(a) << "\n";
     assert("invalid operator" == 0);
   }
   if (a.type() == typeid(double)) {

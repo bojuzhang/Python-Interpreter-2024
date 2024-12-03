@@ -11,6 +11,7 @@ def quick_power(x , y , p) :
 	return ret
 
 def miller_rabin(x , n) :
+	#print("miller_rabin: ",x , n)
 	cnt = 0
 	m = n - 1
 	while m % 2 == 0 :
@@ -19,6 +20,7 @@ def miller_rabin(x , n) :
 	x = quick_power(x , m , n)
 	if x == 1 : return True
 	while cnt :
+		#if cnt >= -10: print("TEST", cnt, x, n)
 		cnt -= 1
 		if x == 1 : return False
 		if x == n - 1 : return True
@@ -33,6 +35,7 @@ def is_prime(x) :
 	while i <= 37 :
 		if not miller_rabin(i , x) : return False
 		i += 1
+		#print("checkprime:", i)
 	return True
 
 def gcd(x , y) :
@@ -57,6 +60,7 @@ def iabs(x) :
 	else : return -x
 
 def pollard_rho(n) :
+	#print ("test", n)
 	#print ("try" , n)
 	if n == 1 : return
 	if is_prime(n) :
@@ -64,6 +68,7 @@ def pollard_rho(n) :
 		return
 	while True :
 		c , p = random(n - 1) + 1 , random(n - 1) + 1
+		#print ("test", c, p)
 		q = F(p , n , c)
 		while p != q :
 			g = gcd(iabs(p - q) , n)

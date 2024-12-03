@@ -7,6 +7,7 @@ void Scope::varRegister(const std::string &varname, std::any vardata) {
 
 std::any Scope::varQuery(const std::string varname) {
   auto now = varmap_.back();
+  // std::cerr << varmap_.size() << "\n";
   if (!now.empty() && now.find(varname) != now.end()) {
     return now[varname];
   } else {

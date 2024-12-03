@@ -6,6 +6,7 @@
 #include "Python3ParserBaseVisitor.h"
 #include "Scope.h"
 
+enum FLOWCONDITION {kCONTINUE, kBREAK, kNOTFLOW};
 
 class EvalVisitor : public Python3ParserBaseVisitor {
 	virtual std::any visitFile_input(Python3Parser::File_inputContext *ctx) override ;

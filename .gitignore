@@ -8,4 +8,5 @@ resources/.antlr
 .cache/
 # Testcases
 testcases/hidden-testcases
+testcases/basic-testcases/test13.py
 2515
