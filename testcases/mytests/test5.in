@@ -1,0 +1,4 @@
+def f(a, b):
+    return b, a
+a, b, c, d = f(1, 2), f(2, 1)
+print(a, b, c, d)
