@@ -9,6 +9,7 @@
 #include <ios>
 #include <iostream>
 #include <string>
+#include <vector>
 
 bool CheckInner(const std::string &s) {
   return s == "print" || s == "int" || s == "float" || s == "str" || s == "bool";
@@ -47,9 +48,12 @@ void printval(std::any val, char ch) {
     std::cout << (std::any_cast<bool>(val) ? "True" : "False") << ch;
   } else if (!val.has_value()){
     std::cout << "None" << ch;
-  } else {
-    // std::cerr << "valtp: " << val.type().name() << "\n";
-    assert("INVALID TYPE PRINT" == 0);
+  } else if (val.type() == typeid(std::vector<std::any>)){
+    auto array = std::any_cast<std::vector<std::any>>(val);
+    for (size_t i = 0; i + 1 < array.size(); i++) {
+      printval(array[i], ' ');
+    }
+    printval(array.back(), ch);
   }
 }
 
