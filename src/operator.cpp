@@ -237,5 +237,21 @@ bool operator == (const std::any &a, const std::any &b) {
   return GetInt(a) == GetInt(b);
 }
 bool operator != (const std::any &a, const std::any &b) {
-  return !(a == b);
+  if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
+    // std::cerr << "test " << a.type().name() << " " << b.type().name() << "\n";
+    // std::cerr << "asjds: " << std::any_cast<std::string>(a) << " " << std::any_cast<std::string>(b) << "\n";
+    if (a.type() != b.type()) {
+      // throw UNVALID COMPARISON
+      // assert("UNVALID COMPARISON" == 0);
+      return false;
+    }
+    return std::any_cast<std::string>(a) != std::any_cast<std::string>(b);
+  }
+  if (!a.has_value() || !b.has_value()) {
+    return a.type() != b.type();
+  }
+  if (a.type() == typeid(double) || b.type() == typeid(double)) {
+    return GetFlout(a) != GetFlout(b);
+  }
+  return GetInt(a) != GetInt(b);
 }

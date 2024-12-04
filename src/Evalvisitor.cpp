@@ -478,27 +478,27 @@ std::any EvalVisitor::visitComparison(Python3Parser::ComparisonContext *ctx) {
     varBack(p);
     auto op = std::any_cast<std::string>(visit(compoparray[i - 1]));
     if (op == "<") {
-      if (res >= p) {
+      if (!(res < p)) {
         return false;
       }
     } else if (op == ">") {
-      if (res <= p) {
+      if (!(res > p)) {
         return false;
       }
     } else if (op == "==") {
-      if (res != p) {
+      if (!(res == p)) {
         return false;
       }
     } else if (op == "<=") {
-      if (res > p) {
+      if (!(res <= p)) {
         return false;
       }
     } else if (op == ">=") {
-      if (res < p) {
+      if (!(res >= p)) {
         return false;
       }
     } else if (op == "!=") {
-      if (res == p) {
+      if (!(res != p)) {
         return false;
       }
     }
