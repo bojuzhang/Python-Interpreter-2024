@@ -2,7 +2,10 @@
 #include "int2048.h"
 #include <any>
 #include <cassert>
+#include <iomanip>
+#include <ios>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 sjtu::int2048 GetInt(const std::any &a) {
@@ -61,7 +64,10 @@ std::string GetString(const std::any &a) {
   } else if (a.type() == typeid(sjtu::int2048)) {
     return std::string(std::any_cast<sjtu::int2048>(a));
   } else if (a.type() == typeid(double)) {
-    return std::to_string(std::any_cast<double>(a));
+    double x = std::any_cast<double>(a);
+    std::ostringstream os;
+    os << std::fixed << std::setprecision(6) << x;
+    return os.str();
   } else if (!a.has_value()) {
     return std::string("None");
   } else {

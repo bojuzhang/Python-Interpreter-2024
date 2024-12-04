@@ -1,0 +1,8 @@
+a = 1.114515237482
+print(str(a))
+a = 1145.4
+print(str(a))
+a = -0.99
+print(str(a))
+a = -99.88
+print(str(a))
