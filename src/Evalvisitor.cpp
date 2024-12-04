@@ -237,9 +237,9 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
         rightarray.push_back(p);
       }
     }
-    for (auto &p : rightarray) {
-      varBack(p);
-    }
+    // for (auto &p : rightarray) {
+    //   varBack(p);
+    // }
     for (int i = static_cast<int>(testlistarray.size()) - 2; i >= 0; i--) {
       leftarray = std::any_cast<std::vector<std::any>>(visit(testlistarray[i]));
       for (size_t j = 0; j < rightarray.size(); j++) {
@@ -248,9 +248,9 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
         scope.varSet(std::any_cast<std::string>(leftarray[j]), p);
       }
       rightarray = leftarray;
-      for (auto &p : rightarray) {
-        varBack(p);
-      }
+      // for (auto &p : rightarray) {
+      //   varBack(p);
+      // }
     }
   } else {
     // TODO augassign
