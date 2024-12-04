@@ -20,11 +20,8 @@ void Scope::varSet(const std::string &varname, std::any vardata) {
   if (!varmap_.back().empty() &&
       varmap_.back().find(varname) != varmap_.back().end()) {
     varmap_.back()[varname] = vardata;
-  } else if (!varmap_[0].empty() &&
-             varmap_[0].find(varname) != varmap_[0].end()) {
-    varmap_[0][varname] = vardata;
   } else {
-    varmap_.back()[varname] = vardata;
+    varmap_[0][varname] = vardata;
   }
   // std::cerr << "end varset\n";
 }

@@ -116,10 +116,6 @@ std::any EvalVisitor::visitArith_expr(Python3Parser::Arith_exprContext *ctx) {
   auto termarray = ctx->term();
   auto res = visit(termarray[0]);
   if (termarray.size() == 1u) {
-    // // // std::cerr << "res_tp: " << res.type().name() << "\n";
-    if (res.type() == typeid(sjtu::int2048)) {
-      // std::cerr << "0ans:::" << std::any_cast<sjtu::int2048>(res) << "\n";
-    }
     return res;
   }
   varBack(res);
