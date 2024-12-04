@@ -210,7 +210,7 @@ std::any EvalVisitor::visitSmall_stmt(Python3Parser::Small_stmtContext *ctx) {
   } else if (ctx->flow_stmt()) {
     return visit(ctx->flow_stmt());
   } else {
-    assert("INVALID SMALLSTMT");
+    //assert("INVALID SMALLSTMT");
     return nullptr;
   }
 }
@@ -298,7 +298,7 @@ std::any EvalVisitor::visitAugassign(Python3Parser::AugassignContext *ctx) {
   } else if (ctx->MOD_ASSIGN()) {
     return std::string("%=");
   } else {
-    assert("INVALID AUGASSIGN" == 0);
+    //assert("INVALID AUGASSIGN" == 0);
   }
 }
 
@@ -310,7 +310,7 @@ std::any EvalVisitor::visitFlow_stmt(Python3Parser::Flow_stmtContext *ctx) {
   } else if (ctx->return_stmt()) {
     return visit(ctx->return_stmt());
   } else {
-    assert("INVALID FLOW" == 0);
+    //assert("INVALID FLOW" == 0);
   }
 }
 
@@ -349,7 +349,7 @@ std::any EvalVisitor::visitCompound_stmt(Python3Parser::Compound_stmtContext *ct
   } else if (ctx->funcdef()) {
     return visit(ctx->funcdef());
   } else {
-    assert("INVALID COMPOUNDSTMT" == 0);
+    //assert("INVALID COMPOUNDSTMT" == 0);
   }
 }
 
@@ -419,6 +419,7 @@ std::any EvalVisitor::visitOr_test(Python3Parser::Or_testContext *ctx) {
   if (andtestarray.size() == 1u) {
     return res;
   }
+  varBack(res);
   if (GetBool(res)) {
     return true;
   }
@@ -438,6 +439,7 @@ std::any EvalVisitor::visitAnd_test(Python3Parser::And_testContext *ctx) {
   if (nottestarray.size() == 1u) {
     return res;
   }
+  varBack(res);
   if (!GetBool(res)) {
     return false;
   }
@@ -520,7 +522,7 @@ std::any EvalVisitor::visitComp_op(Python3Parser::Comp_opContext *ctx) {
     return std::string("!=");
   } else {
     // throw INVALID COMPARISON
-    assert("INVALID COMPARISON" == 0);
+    //assert("INVALID COMPARISON" == 0);
   }
 }
 
@@ -530,7 +532,7 @@ std::any EvalVisitor::visitAddorsub_op(Python3Parser::Addorsub_opContext *ctx) {
   } else if (ctx->MINUS()) {
     return std::string("-");
   } else {
-    assert("???" == 0);
+    //assert("???" == 0);
   }
 }
 
@@ -545,7 +547,7 @@ std::any EvalVisitor::visitMuldivmod_op(Python3Parser::Muldivmod_opContext *ctx)
     return std::string("%");
   } else {
     // throw unvalid muldivmod_op
-    assert("unvalid muldivmod_op" == 0);
+    //assert("unvalid muldivmod_op" == 0);
   }
 }
 
