@@ -7,6 +7,7 @@
 #include <cassert>
 #include <cstddef>
 #include <iostream>
+#include <ratio>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -620,38 +621,40 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
   auto testlistarray = ctx->testlist();
   auto s = ctx->getText();
   s.pop_back();
-  // // std::cerr << s << "\n";
+  // std::cerr << s << "\n";
+  // std::cerr << s.size() << "\n";
   std::string res;
   size_t pos0 = 0, pos1 = 0;
   for (size_t i = 2; i < s.size(); i++) {
+    // std::cerr << res << " " << i << "\n";
     if (s[i] != '{' || (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{')) {
       // std::cerr << "adhashfhsf: " << i << " " << s[i] << " " << s[i + 1] << "\n";
       auto tmp =  stringarray[pos0++]->getText();
-      if (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{') {
-        i++;
-        for (size_t j = 0; j < tmp.size(); j++) {
-          if (tmp[j] == '{') {
-            res += '{';
-            j++;
-          } else if (tmp[j] == '}') {
-            res += '}';
-            j++;
-          } else {
-            res += tmp[j];
-          }
+      for (size_t j = 0; j < tmp.size(); j++) {
+        if (tmp[j] == '{') {
+          res += '{';
+          j++;
+        } else if (tmp[j] == '}') {
+          res += '}';
+          j++;
+        } else {
+          res += tmp[j];
         }
-      } else {
-        res += tmp;
+        // std::cerr << i << " " << j << " " << tmp.size() << "\n";
       }
-      while (i + 1 < s.size() && s[i + 1] != '{') {
-        i++;
-      }
+      i += tmp.size() - 1;
     } else {
       // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
       auto p = std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0];
       varBack(p);
       res += GetString(p);
-      while (i < s.size() && s[i] != '}') {
+      int cnt = 0;
+      while (i < s.size()) {
+        if (s[i] == '{') cnt++;
+        else if (s[i] == '}') cnt--;
+        if (!cnt) {
+          break;
+        }
         i++;
       }
     }
