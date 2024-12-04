@@ -355,6 +355,7 @@ std::any EvalVisitor::visitIf_stmt(Python3Parser::If_stmtContext *ctx) {
   auto suitearray = ctx->suite();
   for (size_t i = 0; i < testarray.size(); i++) {
     auto p = visit(testarray[i]);
+    varBack(p);
     if (GetBool(p)) {
       return visit(suitearray[i]);
     }
