@@ -623,8 +623,9 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
   size_t pos0 = 0, pos1 = 0;
   for (size_t i = 2; i < s.size(); i++) {
     if (s[i] != '{' || (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{')) {
+      // std::cerr << "adhashfhsf: " << i << " " << s[i] << " " << s[i + 1] << "\n";
       auto tmp =  stringarray[pos0++]->getText();
-      if (i + 1 < s.size() && s[i + 1] == '{') {
+      if (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{') {
         i++;
         for (size_t j = 0; j < tmp.size(); j++) {
           if (tmp[j] == '{') {
@@ -644,7 +645,7 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
         i++;
       }
     } else {
-      // // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
+      // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
       auto p = std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0];
       varBack(p);
       res += GetString(p);
