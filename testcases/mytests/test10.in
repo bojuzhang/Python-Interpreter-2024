@@ -6,3 +6,4 @@ a = -0.99
 print(str(a))
 a = -99.88
 print(str(a))
+print(str(float(1926.0817)))

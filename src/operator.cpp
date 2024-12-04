@@ -44,7 +44,7 @@ double GetFlout(const std::any &a) {
   if (a.type() == typeid(bool)) {
     return std::any_cast<bool>(a) ? 1.0 : 0.0;
   } else if (a.type() == typeid(std::string)) {
-    return stof(std::any_cast<std::string>(a));
+    return stod(std::any_cast<std::string>(a));
   } else if (a.type() == typeid(sjtu::int2048)) {
     return double(std::any_cast<sjtu::int2048>(a));
   } else if (a.type() == typeid(double)) {
@@ -64,10 +64,7 @@ std::string GetString(const std::any &a) {
   } else if (a.type() == typeid(sjtu::int2048)) {
     return std::string(std::any_cast<sjtu::int2048>(a));
   } else if (a.type() == typeid(double)) {
-    double x = std::any_cast<double>(a);
-    std::ostringstream os;
-    os << std::fixed << std::setprecision(6) << x;
-    return os.str();
+    return std::to_string(std::any_cast<double>(a));
   } else if (!a.has_value()) {
     return std::string("None");
   } else {
