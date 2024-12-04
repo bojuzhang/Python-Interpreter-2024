@@ -79,7 +79,7 @@ std::any operator - (const std::any &a) {
   if (a.type() == typeid(std::string)) {
     // throw invalid operator
     std::cerr << "test " << std::any_cast<std::string>(a) << "\n";
-    //assert("invalid operator" == 0);
+    assert("invalid operator" == 0);
   }
   if (a.type() == typeid(double)) {
     return -*std::any_cast<double>(&a);
@@ -99,7 +99,7 @@ std::any operator + (const std::any &a, const std::any &b) {
 std::any operator - (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     // throw unvalid operation
-    //assert("unvalid operation" == 0);
+    assert("unvalid operation" == 0);
   }
   if (a.type() == typeid(double) || b.type() == typeid(double)) {
     return GetFlout(a) - GetFlout(b);
@@ -109,7 +109,7 @@ std::any operator - (const std::any &a, const std::any &b) {
 std::any operator * (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) && b.type() == typeid(std::string)) {
     // throw unvalid operation
-    //assert("unvalid operation" == 0);
+    assert("unvalid operation" == 0);
   }
   if (a.type() == typeid(std::string)) {
     std::string s = GetString(a);
@@ -137,7 +137,7 @@ std::any operator * (const std::any &a, const std::any &b) {
 std::any ForceDiv(const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     // throw unvalid operation
-    //assert("unvalid operation" == 0);
+    assert("unvalid operation" == 0);
   }
   std::any res = GetInt(a) / GetInt(b);
   if (a.type() == typeid(double) || b.type() == typeid(double)) {
@@ -148,14 +148,14 @@ std::any ForceDiv(const std::any &a, const std::any &b) {
 std::any operator / (const std::any &a, const std::any &b)  {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     // throw unvalid operation
-    //assert("unvalid operation" == 0);
+    assert("unvalid operation" == 0);
   }
   return GetFlout(a) / GetFlout(b);
 }
 std::any operator % (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     // throw unvalid operation
-    //assert("unvalid operation" == 0);
+    assert("unvalid operation" == 0);
   }
   return a - b * ForceDiv(a, b);
 }
@@ -189,7 +189,7 @@ bool operator < (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
       // throw UNVALID COMPARISON
-      // //assert("UNVALID COMPARISON" == 0);
+      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) < std::any_cast<std::string>(b);
@@ -203,7 +203,7 @@ bool operator > (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
       // throw UNVALID COMPARISON
-      // //assert("UNVALID COMPARISON" == 0);
+      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) > std::any_cast<std::string>(b);
@@ -223,7 +223,7 @@ bool operator == (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
       // throw UNVALID COMPARISON
-      // //assert("UNVALID COMPARISON" == 0);
+      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) == std::any_cast<std::string>(b);

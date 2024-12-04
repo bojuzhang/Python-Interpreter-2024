@@ -81,7 +81,7 @@ std::any Inner(const std::string &funcname, const std::vector<std::any> &val) {
   } else if (funcname == "float") {
     return GetFlout(val[0]);
   } else {
-    //assert("INVALID INNER FUNC" == 0);
+    assert("INVALID INNER FUNC" == 0);
     return std::any();
   }
 }
