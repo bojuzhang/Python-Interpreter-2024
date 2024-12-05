@@ -2,10 +2,7 @@
 #include "int2048.h"
 #include <any>
 #include <cassert>
-#include <iomanip>
-#include <ios>
 #include <iostream>
-#include <sstream>
 #include <string>
 
 sjtu::int2048 GetInt(const std::any &a) {
@@ -18,9 +15,6 @@ sjtu::int2048 GetInt(const std::any &a) {
   } else if (a.type() == typeid(double)){
     return sjtu::int2048((long long)(std::any_cast<double>(a)));
   } else {
-    // throw unexpected typeid
-    // exit(-1);
-    // return std::any_cast<sjtu::int2048&>(a);
     return sjtu::int2048(0);
   }
 }
@@ -34,9 +28,6 @@ bool GetBool(const std::any &a) {
   } else if (a.type() == typeid(double)) {
     return std::any_cast<double>(a) != 0;
   } else {
-    // throw unexpected typeid
-    // exit(-1);
-    // return std::any_cast<bool&>(a);
     return false;
   }
 }
@@ -50,9 +41,6 @@ double GetFlout(const std::any &a) {
   } else if (a.type() == typeid(double)) {
     return std::any_cast<double>(a);
   } else {
-    // throw unexpected typeid
-    // exit(-1);
-    // return std::any_cast<double&>(a);
     return 0.0;
   }
 }
@@ -68,9 +56,6 @@ std::string GetString(const std::any &a) {
   } else if (!a.has_value()) {
     return std::string("None");
   } else {
-    // throw unexpected typeid
-    // exit(-1);
-    // return std::any_cast<std::string&>(a);
     return "";
   }
 } 
@@ -191,8 +176,6 @@ std::any & ForceDivEqual(std::any &a, const std::any &b) {
 bool operator < (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
-      // throw UNVALID COMPARISON
-      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) < std::any_cast<std::string>(b);
@@ -205,8 +188,6 @@ bool operator < (const std::any &a, const std::any &b) {
 bool operator > (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
-      // throw UNVALID COMPARISON
-      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) > std::any_cast<std::string>(b);
@@ -225,8 +206,6 @@ bool operator >= (const std::any &a, const std::any &b) {
 bool operator == (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
     if (a.type() != b.type()) {
-      // throw UNVALID COMPARISON
-      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) == std::any_cast<std::string>(b);
@@ -241,11 +220,7 @@ bool operator == (const std::any &a, const std::any &b) {
 }
 bool operator != (const std::any &a, const std::any &b) {
   if (a.type() == typeid(std::string) || b.type() == typeid(std::string)) {
-    // std::cerr << "test " << a.type().name() << " " << b.type().name() << "\n";
-    // std::cerr << "asjds: " << std::any_cast<std::string>(a) << " " << std::any_cast<std::string>(b) << "\n";
     if (a.type() != b.type()) {
-      // throw UNVALID COMPARISON
-      // assert("UNVALID COMPARISON" == 0);
       return false;
     }
     return std::any_cast<std::string>(a) != std::any_cast<std::string>(b);

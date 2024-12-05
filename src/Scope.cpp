@@ -1,12 +1,10 @@
 #include "Scope.h"
-#include <iostream>
 
-void Scope::varRegister(const std::string &varname, std::any vardata) {
+void Scope::VarRegister(const std::string &varname, std::any vardata) {
   varmap_.back()[varname] = vardata;
 }
 
-std::any Scope::varQuery(const std::string varname) {
-  // std::cerr << varmap_.size() << "\n";
+std::any Scope::VarQuery(const std::string varname) {
   if (varmap_.back().find(varname) != varmap_.back().end()) {
     return varmap_.back()[varname];
   } else {
@@ -14,8 +12,7 @@ std::any Scope::varQuery(const std::string varname) {
   }
 }
 
-void Scope::varSet(const std::string &varname, std::any vardata) {
-  // std::cerr << "test " << varname << " " << vardata.type().name() << " " << varmap_.size() << "\n";
+void Scope::VarSet(const std::string &varname, std::any vardata) {
   if (!varmap_.back().empty() &&
       varmap_.back().find(varname) != varmap_.back().end()) {
     varmap_.back()[varname] = vardata;
@@ -24,10 +21,9 @@ void Scope::varSet(const std::string &varname, std::any vardata) {
   } else {
     varmap_.back()[varname] = vardata;
   }
-  // std::cerr << "end varset\n";
 }
 
-bool Scope::varFind(const std::string &varname) {
+bool Scope::VarFind(const std::string &varname) {
   return (varmap_.back().find(varname) != varmap_.back().end()) ||
          (varmap_[0].find(varname) != varmap_[0].end());
 }

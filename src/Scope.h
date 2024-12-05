@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SCPOE_H
 #define SCPOE_H
 
@@ -15,16 +16,16 @@ public:
     varmap_.emplace_back();
   }
 
-  void varRegister(const std::string &varname, std::any vardata) ;
-  std::any varQuery(const std::string varname) ;
-  void varSet(const std::string &varname, std::any vardata) ;
+  void VarRegister(const std::string &varname, std::any vardata) ;
+  std::any VarQuery(const std::string varname) ;
+  void VarSet(const std::string &varname, std::any vardata) ;
   
-  bool varFind(const std::string &varname) ;
+  bool VarFind(const std::string &varname) ;
 
-  void layercreate() {
+  void LayerCreate() {
     varmap_.emplace_back();
   }
-  void layerdelete() {
+  void LayerDelete() {
     varmap_.pop_back();
   }
 };

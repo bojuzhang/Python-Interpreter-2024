@@ -1,5 +1,4 @@
 #pragma once
-#pragma GCC optimize(3)
 #ifndef SJTU_BIGINTEGER
 #define SJTU_BIGINTEGER
 

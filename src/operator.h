@@ -1,3 +1,4 @@
+#pragma once
 #ifndef OPERATOR_H
 #define OPERATOR_H
 
@@ -34,4 +35,4 @@ bool operator >= (const std::any &, const std::any &);
 bool operator == (const std::any &, const std::any &);
 bool operator != (const std::any &, const std::any &);
 
-#endif
+#endif // OPERATOR_H

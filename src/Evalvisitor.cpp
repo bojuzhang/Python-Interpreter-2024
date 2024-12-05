@@ -1,13 +1,10 @@
 #include "Evalvisitor.h"
 #include "Scope.h"
 #include "Func.h"
-#include "int2048.h"
 #include "operator.h"
 #include <any>
 #include <cassert>
 #include <cstddef>
-#include <iostream>
-#include <ratio>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -22,8 +19,8 @@ void varBack(std::any &p) {
     return ;
   }
   auto varname = std::any_cast<std::string>(p);
-  if (scope.varFind(varname)) {
-    p = scope.varQuery(varname);
+  if (scope.VarFind(varname)) {
+    p = scope.VarQuery(varname);
   }
 } 
 
@@ -32,7 +29,6 @@ bool isFlow(const std::any &a) {
 }
 
 std::any EvalVisitor::visitAtom(Python3Parser::AtomContext *ctx) {
-  // // std::cerr << "visitatom\n";
   if (ctx->NAME()) {
     auto p = ctx->NAME()->getText();
     return p;
@@ -50,8 +46,6 @@ std::any EvalVisitor::visitAtom(Python3Parser::AtomContext *ctx) {
   } else if (ctx->FALSE()) {
     return false;
   } else if (!ctx->STRING().empty()) {
-    // TODO
-    // // std::cerr << "STRING!!!!\n";
     auto p = ctx->STRING();
     std::string res;
     for (const auto &x : p) {
@@ -60,7 +54,6 @@ std::any EvalVisitor::visitAtom(Python3Parser::AtomContext *ctx) {
       s.pop_back();
       res += s;
     }
-    // // std::cerr << "res: " << res << "\n";
     return res;
   } else if (ctx->test()) {
     return visit(ctx->test());
@@ -112,7 +105,6 @@ std::any EvalVisitor::visitTerm(Python3Parser::TermContext *ctx) {
 }
 
 std::any EvalVisitor::visitArith_expr(Python3Parser::Arith_exprContext *ctx) {
-  // std::cerr << "visitarithexpr\n";
   auto termarray = ctx->term();
   auto res = visit(termarray[0]);
   if (termarray.size() == 1u) {
@@ -124,7 +116,6 @@ std::any EvalVisitor::visitArith_expr(Python3Parser::Arith_exprContext *ctx) {
     auto x = visit(termarray[i]);
     varBack(x);
     auto p = visit(addorsub_oparray[i - 1]);
-    // // // std::cerr << (p.type() == typeid(char*)) << "\n";
     auto op = std::any_cast<std::string>(visit(addorsub_oparray[i - 1]));
     if (op == "+") {
       res += x;
@@ -132,13 +123,6 @@ std::any EvalVisitor::visitArith_expr(Python3Parser::Arith_exprContext *ctx) {
       res -= x;
     }
   }
-  // std::cerr << "restp: " << res.type().name() << "\n";
-  // if (res.type() == typeid(sjtu::int2048))
-    // std::cerr << "1ans:::" << std::any_cast<sjtu::int2048>(res) << "\n";
-  // else if (res.type() == typeid(double))
-    // std::cerr << "1ans:::" << std::any_cast<double>(res) << "\n";
-  // else if (res.type() == typeid(std::string)) 
-    // std::cerr << "1ans:::" << std::any_cast<std::string>(res) << "\n";
   return res;
 }
 
@@ -213,9 +197,7 @@ std::any EvalVisitor::visitSmall_stmt(Python3Parser::Small_stmtContext *ctx) {
 }
 
 std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
-  // // // std::cerr << "visitexpr_stmt\n";
   auto testlistarray = ctx->testlist();
-  // // // std::cerr << "arraysize: " << testlistarray.size() << "\n";
   if (testlistarray.size() == 1u) {
     visit(testlistarray[0]);
     return kNOTFLOW;
@@ -233,33 +215,23 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
         rightarray.push_back(p);
       }
     }
-    // for (auto &p : rightarray) {
-    //   varBack(p);
-    // }
     for (int i = static_cast<int>(testlistarray.size()) - 2; i >= 0; i--) {
       leftarray = std::any_cast<std::vector<std::any>>(visit(testlistarray[i]));
       for (size_t j = 0; j < rightarray.size(); j++) {
         auto p = rightarray[j];
         varBack(p);
-        scope.varSet(std::any_cast<std::string>(leftarray[j]), p);
+        scope.VarSet(std::any_cast<std::string>(leftarray[j]), p);
       }
       rightarray = leftarray;
-      // for (auto &p : rightarray) {
-      //   varBack(p);
-      // }
     }
   } else {
-    // TODO augassign
     auto x = visit(testlistarray[0]);
     auto op = std::any_cast<std::string>(visit(ctx->augassign()));
     auto y = visit(testlistarray[1]);
     y = std::any_cast<std::vector<std::any>>(y)[0];
     varBack(y);
-    // // std::cerr << "xtp: " << std::any_cast<std::vector<std::any>>(x)[0].type().name() << "\n";
     auto name = std::any_cast<std::string>(std::any_cast<std::vector<std::any>>(x)[0]);
-    // // std::cerr << name << "\n";
-    auto val = scope.varQuery(name);
-    // // std::cerr << "ytp: " << y.type().name() << "\n";
+    auto val = scope.VarQuery(name);
     if (op == "+=") {
       val += y;
     } else if (op == "-=") {
@@ -273,11 +245,8 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
     } else if (op == "%=") {
       val %= y;
     }
-    // // std::cerr << "valtp: " << val.type().name() << "\n";
-    // // std::cerr << "val: " << std::any_cast<sjtu::int2048>(val) << "\n";
-    scope.varSet(name, val);
+    scope.VarSet(name, val);
   }
-  // // // std::cerr << "end expr_stmt\n";
   return kNOTFLOW;
 }
 
@@ -312,7 +281,6 @@ std::any EvalVisitor::visitFlow_stmt(Python3Parser::Flow_stmtContext *ctx) {
 }
 
 std::any EvalVisitor::visitBreak_stmt(Python3Parser::Break_stmtContext *ctx) {
-  // // std::cerr  << "BREAK!!!!";
   return kBREAK;
 }
 
@@ -321,9 +289,7 @@ std::any EvalVisitor::visitContinue_stmt(Python3Parser::Continue_stmtContext *ct
 }
 
 std::any EvalVisitor::visitReturn_stmt(Python3Parser::Return_stmtContext *ctx) {
-  // std::cerr << "visitreturn\n";
   if (!ctx->testlist()) {
-    // std::cerr << "VOID RETURN!!!\n";
     return std::any();
   } else {
     auto valarray = std::any_cast<std::vector<std::any>>(visit(ctx->testlist()));
@@ -361,7 +327,6 @@ std::any EvalVisitor::visitIf_stmt(Python3Parser::If_stmtContext *ctx) {
     }
   }
   if (suitearray.size() == testarray.size() + 1) {
-    // else
     return visit(suitearray.back());
   }
   return kNOTFLOW;
@@ -393,12 +358,10 @@ std::any EvalVisitor::visitSuite(Python3Parser::SuiteContext *ctx) {
   auto stmtarray = ctx->stmt();
   for (size_t i = 0; i < stmtarray.size(); i++) {
     auto p = visit(stmtarray[i]);
-    // std::cerr << "stmttp : " << p.type().name() << "\n";
     if (p.type() != typeid(FLOWCONDITION)) {
       return p;
     }
     if (isFlow(p)) {
-      // // std::cerr << "ISFLOW!!!!!!!!!!!!!!!!!!!\n";
       return p;
     }
   }
@@ -407,7 +370,6 @@ std::any EvalVisitor::visitSuite(Python3Parser::SuiteContext *ctx) {
 
 std::any EvalVisitor::visitTest(Python3Parser::TestContext *ctx) {
   auto p = visit(ctx->or_test());
-  // // // std::cerr << "test_tp: " << p.type().name() << "\n";
   return p;
 }
 
@@ -462,7 +424,6 @@ std::any EvalVisitor::visitNot_test(Python3Parser::Not_testContext *ctx) {
 }
 
 std::any EvalVisitor::visitComparison(Python3Parser::ComparisonContext *ctx) {
-  // std::cerr << "visitcomparison\n";
   auto arritharray = ctx->arith_expr();
   auto res = visit(arritharray[0]);
   if (arritharray.size() == 1u) {
@@ -501,7 +462,6 @@ std::any EvalVisitor::visitComparison(Python3Parser::ComparisonContext *ctx) {
     }
     res = p;
   }
-  // // std::cerr << "TRUE!!!\n";
   return true;
 }
 
@@ -550,7 +510,6 @@ std::any EvalVisitor::visitMuldivmod_op(Python3Parser::Muldivmod_opContext *ctx)
 }
 
 std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
-  // std::cerr << "visitatom_expr!!!\n";
   if (ctx->trailer()) {
     auto funcname = std::any_cast<std::string>(visit(ctx->atom()));
     auto vallist = std::any_cast<std::pair<std::vector<std::any>, std::vector<std::pair<std::string, std::any>>>>(visit(ctx->trailer()));
@@ -567,9 +526,6 @@ std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
         position.push_back(p);
       }
     }
-    // if (funcname == "pollard_rho") {
-    //   std::cerr << "pollard_rho\n" << std::any_cast<sjtu::int2048>((vallist.first)[0]) << "\n";
-    // }
     if (CheckInner(funcname)) {
       std::vector<std::any> val;
       for (const auto &x : position) {
@@ -580,25 +536,24 @@ std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
       }
       return Inner(funcname, val);
     }
-    scope.layercreate();
-    // std::cerr << "scopelayercreated\n";
+    scope.LayerCreate();
     auto suite = func.GetSuite(funcname);
     auto initval = func.GetInitial(funcname);
     std::unordered_set<std::string> used;
     for (size_t i = 0; i < position.size(); i++) {
-      scope.varRegister(initval[i].first, position[i]);
+      scope.VarRegister(initval[i].first, position[i]);
     }
     for (size_t i = 0; i < keyboard.size(); i++) {
-      scope.varRegister(keyboard[i].first, keyboard[i].second);
+      scope.VarRegister(keyboard[i].first, keyboard[i].second);
       used.insert(keyboard[i].first);
     }
     for (size_t i = position.size(); i < initval.size(); i++) {
       if (used.find(initval[i].first) == used.end()) {
-        scope.varRegister(initval[i].first, initval[i].second);
+        scope.VarRegister(initval[i].first, initval[i].second);
       }
     }
     auto res = visit(suite);
-    scope.layerdelete();
+    scope.LayerDelete();
     return res;
   } else {
     return visit(ctx->atom());
@@ -618,14 +573,10 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
   auto testlistarray = ctx->testlist();
   auto s = ctx->getText();
   s.pop_back();
-  // std::cerr << s << "\n";
-  // std::cerr << s.size() << "\n";
   std::string res;
   size_t pos0 = 0, pos1 = 0;
   for (size_t i = 2; i < s.size(); i++) {
-    // std::cerr << res << " " << i << "\n";
     if (s[i] != '{' || (i + 1 < s.size() && s[i] == '{' && s[i + 1] == '{')) {
-      // std::cerr << "adhashfhsf: " << i << " " << s[i] << " " << s[i + 1] << "\n";
       auto tmp =  stringarray[pos0++]->getText();
       for (size_t j = 0; j < tmp.size(); j++) {
         if (tmp[j] == '{') {
@@ -637,11 +588,9 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
         } else {
           res += tmp[j];
         }
-        // std::cerr << i << " " << j << " " << tmp.size() << "\n";
       }
       i += tmp.size() - 1;
     } else {
-      // std::cerr << "test " << i << " " << s[i] << " " << pos1 << "\n";
       auto p = std::any_cast<std::vector<std::any>>(visit(testlistarray[pos1++]))[0];
       varBack(p);
       res += GetString(p);
@@ -660,20 +609,16 @@ std::any EvalVisitor::visitFormat_string(Python3Parser::Format_stringContext *ct
 }
 
 std::any EvalVisitor::visitTestlist(Python3Parser::TestlistContext *ctx) {
-  // // // std::cerr << "visittestlist\n";
   std::vector<std::any> ans;
   auto testarray = ctx->test();
-  // // // std::cerr << testarray.size() << "\n";
   for (const auto &p : testarray) {
     auto val = visit(p);
-    // // // std::cerr << "testlisttp: " << val.type().name() << "\n";
     ans.push_back(val);
   }
   return ans;
 }
 
 std::any EvalVisitor::visitArglist(Python3Parser::ArglistContext *ctx) {
-  // std::cerr << "visitarglist\n";
   std::vector<std::any> positional;
   std::vector<std::pair<std::string, std::any>> keyboard;
   auto argumentarray = ctx->argument();

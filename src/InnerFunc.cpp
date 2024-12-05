@@ -15,7 +15,7 @@ bool CheckInner(const std::string &s) {
   return s == "print" || s == "int" || s == "float" || s == "str" || s == "bool";
 }
 
-void printval(std::any val, char ch) {
+void PrintVal(std::any val, char ch) {
   if (val.type() == typeid(sjtu::int2048)) {
     std::cout << std::any_cast<sjtu::int2048>(val) << ch;
   } else if (val.type() == typeid(std::string)) {
@@ -51,9 +51,9 @@ void printval(std::any val, char ch) {
   } else if (val.type() == typeid(std::vector<std::any>)){
     auto array = std::any_cast<std::vector<std::any>>(val);
     for (size_t i = 0; i + 1 < array.size(); i++) {
-      printval(array[i], ' ');
+      PrintVal(array[i], ' ');
     }
-    printval(array.back(), ch);
+    PrintVal(array.back(), ch);
   }
 }
 
@@ -63,9 +63,9 @@ std::any Inner(const std::string &funcname, const std::vector<std::any> &val) {
     // std::cerr << "Print!!\n";
     for (size_t i = 0; i < val.size(); i++) {
       if (i + 1 < val.size()) {
-        printval(val[i], ' ');
+        PrintVal(val[i], ' ');
       } else {
-        printval(val[i], '\n');
+        PrintVal(val[i], '\n');
       }
     }
     if (val.empty()) {

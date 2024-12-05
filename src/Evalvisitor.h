@@ -4,7 +4,6 @@
 
 
 #include "Python3ParserBaseVisitor.h"
-#include "Scope.h"
 
 enum FLOWCONDITION {kCONTINUE, kBREAK, kNOTFLOW};
 
