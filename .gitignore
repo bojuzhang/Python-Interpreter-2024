@@ -5,6 +5,7 @@ build/
 gen/
 antlr-playground/.antlr
 resources/.antlr
+/.cache
 # Testcases
 testcases/hidden-testcases
 testcases/basic-testcases/test13.py

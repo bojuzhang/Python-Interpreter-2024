@@ -15,10 +15,10 @@ Scope scope;
 Function func;
 
 void varBack(std::any &p) {
-  if (p.type() != typeid(std::string)) {
+  if (p.type() != typeid(std::pair<std::string, bool>)) {
     return ;
   }
-  auto varname = std::any_cast<std::string>(p);
+  auto varname = std::any_cast<std::pair<std::string, bool>>(p).first;
   if (scope.VarFind(varname)) {
     p = scope.VarQuery(varname);
   }
@@ -31,7 +31,7 @@ bool isFlow(const std::any &a) {
 std::any EvalVisitor::visitAtom(Python3Parser::AtomContext *ctx) {
   if (ctx->NAME()) {
     auto p = ctx->NAME()->getText();
-    return p;
+    return std::make_pair(p, true);
   } else if (ctx->NUMBER()) {
     auto s = ctx->NUMBER()->getText();
     if (s.find('.') != s.npos) {
@@ -220,7 +220,7 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
       for (size_t j = 0; j < rightarray.size(); j++) {
         auto p = rightarray[j];
         varBack(p);
-        scope.VarSet(std::any_cast<std::string>(leftarray[j]), p);
+        scope.VarSet(std::any_cast<std::pair<std::string, bool>>(leftarray[j]).first, p);
       }
       rightarray = leftarray;
     }
@@ -230,7 +230,7 @@ std::any EvalVisitor::visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) {
     auto y = visit(testlistarray[1]);
     y = std::any_cast<std::vector<std::any>>(y)[0];
     varBack(y);
-    auto name = std::any_cast<std::string>(std::any_cast<std::vector<std::any>>(x)[0]);
+    auto name = std::any_cast<std::pair<std::string, bool>>(std::any_cast<std::vector<std::any>>(x)[0]).first;
     auto val = scope.VarQuery(name);
     if (op == "+=") {
       val += y;
@@ -511,7 +511,7 @@ std::any EvalVisitor::visitMuldivmod_op(Python3Parser::Muldivmod_opContext *ctx)
 
 std::any EvalVisitor::visitAtom_expr(Python3Parser::Atom_exprContext *ctx) {
   if (ctx->trailer()) {
-    auto funcname = std::any_cast<std::string>(visit(ctx->atom()));
+    auto funcname = std::any_cast<std::pair<std::string, bool>>(visit(ctx->atom())).first;
     auto vallist = std::any_cast<std::pair<std::vector<std::any>, std::vector<std::pair<std::string, std::any>>>>(visit(ctx->trailer()));
     auto tmp = vallist.first;
     auto keyboard = vallist.second;
@@ -640,7 +640,7 @@ std::any EvalVisitor::visitArgument(Python3Parser::ArgumentContext *ctx) {
     varBack(p);
     return p;
   } else {
-    std::string name = std::any_cast<std::string>(visit(testarray[0]));
+    std::string name = std::any_cast<std::pair<std::string, bool>>(visit(testarray[0])).first;
     auto val = visit(testarray[1]);
     varBack(val);
     return std::make_pair(name, val);
